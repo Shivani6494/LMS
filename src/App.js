@@ -6,10 +6,12 @@ import Admin from './container/Admin/Admin'
 
 function App() {
    const [isAuthenticated, setIsAuthenticated] = useState (false)
+   const logedin = localStorage.getItem('username')
+   console.log(logedin)
   return (
     <div>
       {
-        isAuthenticated ? <Admin setIsAuthenticated = {setIsAuthenticated}/> : <Login setIsAuthenticated = {setIsAuthenticated}/> 
+        logedin ? <Admin setIsAuthenticated = {setIsAuthenticated}/> : <Login setIsAuthenticated = {setIsAuthenticated}/> 
       }
     </div>
   );

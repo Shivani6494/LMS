@@ -4,60 +4,37 @@ import Input from '../../../components/Input/Input'
 import ModalWrap from '../../../components/Modal/Modal'
 import CreateStudent from './CreateStudent';
 import StudentList from './Studentlist';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { saveStudent } from '../../../store/action/student';
 
 const Student = () => {
     const [isCreate , setisCreate] = useState (true);
     const [lgShow,setLgShow] = useState(false);
     const [newCity,setnewCity] = useState({});
-    const [listofStudents,setlistofStudents] = useState ([{
-        id : 1,
-        firstname: "Shivani",
-        lastname: "Bhatt",
-        username: "shivani123",
-        password: 123456,
-        country: 1,
-        city: 2
-    },
-    {
-        id : 2,
-        firstname: "John",
-        lastname: "Desola",
-        username: "gdelo23",
-        password: 9874,
-        country: 1,
-        city: 1
-    }
-])
+    const [listofStudents,setlistofStudents] = useState ([]);
+    const [originalListOfStudents,setoriginalListOfStudents] = useState ([]);
+  
+    const dispatch = useDispatch();
 
-const [originalListOfStudents,setoriginalListOfStudents] = useState ([{
-    id : 1,
-    firstname: "Shivani",
-    lastname: "Bhatt",
-    username: "shivani123",
-    password: 123456,
-    country: 1,
-    city: 2
-},
-{
-    id : 2,
-    firstname: "John",
-    lastname: "Desola",
-    username: "gdelo23",
-    password: 9874,
-    country: 1,
-    city: 1
-}
-])
-    
-useEffect (()=>{
-    console.log('newcity...',newCity);
-},[newCity])
+    const studentRedux = useSelector(state => state.studentState.Student)
+
+useEffect (() => {
+    setlistofStudents(studentRedux)
+    setoriginalListOfStudents(studentRedux)
+},[studentRedux])
+
+// useEffect (()=>{
+//     console.log('newcity...',newCity);
+// },[newCity])
 
 const submit = () => {
-    const newCityArray = [...listofStudents]
-    newCityArray.push(newCity)
-  setlistofStudents(newCityArray)
-    console.log(newCity);
+//     const newCityArray = [...listofStudents]
+//     newCityArray.push(newCity)
+//   setlistofStudents(newCityArray)
+//     console.log(newCity);
+    axios.post('https://lms-redux.firebaseio.com/student.json', {Student : newCity})
+    dispatch(saveStudent(newCity))
 }
 
 const editSubmit = () => {

@@ -15,7 +15,7 @@ const NavbarWrap = ({setIsAuthenticated,setCurrentPage}) => {
       <FormControl type="text" placeholder="Search" className="mr-sm-2" />
       <Button variant="outline-info">Search</Button>
     </Form>
-    <Nav.Link href="/" style={{ "color": "white" }} onClick={() => setIsAuthenticated(false)}>Logout</Nav.Link>
+    <Nav.Link href="/" style={{ "color": "white" }} onClick={() => localStorage.clear()}>Logout</Nav.Link>
   </Navbar>
   </>
 }

@@ -6,6 +6,7 @@ import ModalWrap from './Modal/Modal'
 import DropdownWrap from './Dropdown/Dropdown'
 import TableWrap from './Table/Table';
 import StudentTableWrap from './Table/Studenttable'
+import FromErrors from './FormErrors/FormErrors'
 
 export {
     ButtonWrap,
@@ -15,5 +16,6 @@ export {
     ModalWrap,
     DropdownWrap,
     TableWrap,
-    StudentTableWrap
+    StudentTableWrap,
+    FromErrors
 }

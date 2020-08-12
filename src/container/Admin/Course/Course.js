@@ -4,54 +4,38 @@ import Input from '../../../components/Input/Input'
 import ModalWrap from '../../../components/Modal/Modal';
 import List from './List'
 import Create from './Create'
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { saveCourse } from '../../../store/action/course';
 
 const Course = () => {
-    const [isCreate , setisCreate] = useState (true);
-    
+    const [isCreate , setisCreate] = useState (true);    
     const [lgShow,setLgShow] = useState(false);
     const [newCourse,setnewCourse] = useState({});
-    const [listofCourses,setlistofCourses] = useState ([{
-        id: 1,
-    courseName: "Course Name",
-    category: 1,
-    subCategory: 2,
-    fees: 1000
-    },
-    {
-        id: 2,
-        courseName: "Second Name",
-        category: 2,
-        subCategory: 1,
-        fees: 1200
-      }
-])
-const [originalListOfCourses,setoriginalListOfCourse] = useState ([{
-    id: 1,
-courseName: "Course Name",
-category: 1,
-subCategory: 2,
-fees: 1000
-},
-{
-    id: 2,
-    courseName: "Second Name",
-    category: 2,
-    subCategory: 1,
-    fees: 1200
-  }
-]);
+    const [listofCourses,setlistofCourses] = useState ([])
+    const [originalListOfCourses,setoriginalListOfCourse] = useState ([])
 
+    const dispatch = useDispatch();
 
-useEffect (()=> {
-    console.log("NewCourse...",newCourse);
-},[newCourse])
+    const courseRedux = useSelector(state => state.courseState.course)
+
+useEffect(() =>{
+    setlistofCourses(courseRedux)
+    setoriginalListOfCourse(courseRedux)
+},[courseRedux])
+
+// useEffect (()=> {
+//     console.log("NewCourse...",newCourse);
+// },[newCourse])
 
     const submit = () => {
 
-        const newCourseArray = [...listofCourses];
-        newCourseArray.push(newCourse)
-        setlistofCourses(newCourseArray)
-        console.log(newCourse)
+        // const newCourseArray = [...listofCourses];
+        // newCourseArray.push(newCourse)
+        // setlistofCourses(newCourseArray)
+        // console.log(newCourse)
+        axios.post('https://lms-redux.firebaseio.com/course.json', {course : newCourse})
+        dispatch(saveCourse(newCourse))
     }
     
     const editSubmit = () => {
@@ -90,7 +74,7 @@ useEffect (()=> {
 
         <PrimaryButton text="Create New Course" onClick = {CreateCourse}/><br/><br/>
         <div style = {{"width" : "500px"}}>
-            <Input text = "Filter by Course" autoFoucus = {true} onChange = {filterCourse} />
+            <Input name = "filter" text = "Filter by Course" autoFoucus = {true} onChange = {filterCourse} />
         </div>
         <List listofcourses={listofCourses} onClick = {(course) => editCourse(course) } />
         <ModalWrap title="Create New Course"  submit={submit} isCreate={isCreate} editSubmit = {editSubmit} lgShow={lgShow} setLgShow={setLgShow}>

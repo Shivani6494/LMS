@@ -3,11 +3,26 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import {Provider} from 'react-redux';
+import {createStore, combineReducers} from 'redux';
+import {course,student} from '../src/store/reducer';
+import {BrowserRouter} from 'react-router-dom';
+
+const rootReducers = combineReducers({
+  courseState : course,
+  studentState : student
+})
+
+const store = createStore(rootReducers)
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('root')
 );
 
