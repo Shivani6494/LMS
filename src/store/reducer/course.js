@@ -20,10 +20,17 @@ const initialState = {
 
 function course(state = initialState,action) {
     switch (action.type){
-        case actionType.SAVE_COURSE : 
+        case actionType.COURSE_SAVE_START:
+            return {course : [...state.course] , loading : true , error: null}
+        
+        case actionType.COURSE_SAVE_SUCCESS : 
             const newCourseArray = [...state.course];
             newCourseArray.push(action.value);
-            return {course : newCourseArray};
+            return {course : newCourseArray , loading : false , error: null};
+
+        case actionType.COURSE_SAVE_FAILURE:
+            return {course : [...state.course] , loading : false , error: action.value};
+            
         default :
             return state;
     }

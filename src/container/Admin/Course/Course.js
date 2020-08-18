@@ -7,6 +7,7 @@ import Create from './Create'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { saveCourse } from '../../../store/action/course';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler'
 
 const Course = () => {
     const [isCreate , setisCreate] = useState (true);    
@@ -34,8 +35,7 @@ useEffect(() =>{
         // newCourseArray.push(newCourse)
         // setlistofCourses(newCourseArray)
         // console.log(newCourse)
-        axios.post('https://lms-redux.firebaseio.com/course.json', {course : newCourse})
-        dispatch(saveCourse(newCourse))
+         dispatch(saveCourse(newCourse))
     }
     
     const editSubmit = () => {
@@ -83,4 +83,4 @@ useEffect(() =>{
     </div>
 }
 
-export default Course;                      
+export default withErrorHandler(Course,axios);                      

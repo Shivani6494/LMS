@@ -4,16 +4,20 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from 'react-redux';
-import {createStore, combineReducers} from 'redux';
-import {course,student} from '../src/store/reducer';
+import {createStore, combineReducers, applyMiddleware , compose} from 'redux';
+import {course,student} from '../src/store/reducer/index';
 import {BrowserRouter} from 'react-router-dom';
+import thunk from 'redux-thunk';
 
 const rootReducers = combineReducers({
   courseState : course,
-  studentState : student
+  studentState : student,
+  // authState : auth
 })
 
-const store = createStore(rootReducers)
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(rootReducers,composeEnhancers(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>
