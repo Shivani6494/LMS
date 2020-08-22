@@ -1,7 +1,7 @@
 import React from 'react'
 import {InputGroup,FormControl} from '../../Bootstrapplayer/Bootstrapplayer'
 
-const Input = ({text,autoFocus,name,onChange,value}) => {
+const Input = ({type,text,autoFocus,name,onChange,value}) => {
     return (
     <div>
     <InputGroup className="mb-3">
@@ -16,6 +16,7 @@ const Input = ({text,autoFocus,name,onChange,value}) => {
       name={name}
       onChange={onChange}
       value={value}
+      type = {type}
     />
   </InputGroup>
   </div>
