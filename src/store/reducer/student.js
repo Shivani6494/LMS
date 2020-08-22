@@ -1,7 +1,9 @@
 import * as actionType from '../action/type';
 
 const initialState = {
-    student : []
+    student : [],
+    loading: false,
+    error: null
 };
 
 function student (state = initialState,action){
@@ -16,6 +18,15 @@ function student (state = initialState,action){
         
         case actionType.STUDENT_SAVE_FAILURE:
                 return {student : [...state.student] , loading : false , error: action.value};    
+        
+        case actionType.STUDENT_LIST_START:
+            return { ...state, loading: true, error: null };
+
+        case actionType.STUDENT_LIST_SUCCESS:
+            return { ...state, loading: false, error: null, list: action.value };
+
+        case actionType.STUDENT_LIST_FAILURE:
+            return { ...state, loading: false, error: action.value };
         
         default :
             return state;
