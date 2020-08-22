@@ -1,86 +1,59 @@
-import React, { useState } from 'react'
-import { PrimaryButton, SecondaryButton } from '../../components'
-import Input from '../../components/Input/Input'
-import './login.css'
-import FormErrors from '../../components/FormErrors/FormErrors'
-import { compose } from 'redux'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import axios from 'axios'
 
-const Login = ({ setIsAuthenticated }) => {
-    const [value, setValue] = useState({})
-    const [formErrors, setFormErrors] = useState(
-        { email: '', password: '' }
-    )
-    const [emailvalidation, setEmailvalidation] = useState(false)
-    const [passwordvalidation, setpasswordvalidation] = useState(false)
-    const [formvalid, setFormvalid] = useState(false)
+import { Input, PrimaryButton, SecondayButton, Loader } from '../../components';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+import { auth } from '../../store/action/auth';
+import loginFormValidate from '../../helper/loginFormValidation';
 
-    const handleChange = (e) => {
-        const name = e.target.name;
-        const value = e.target.value;
-        setValue({ [name]: value })
-        validateField(name, value)
-    }
+import useForm from '../../customHooks/useForm'
 
-    const validateField = (fieldName, value) => {
-        console.log(fieldName, value)
-        let fieldValidationErrors = formErrors;
-        let emailValidation = emailvalidation;
-        let passwordValidation = passwordvalidation;
-        switch (fieldName) {
-            case 'email':
-                emailValidation = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-                fieldValidationErrors.email = emailValidation ? '' : ' is Invalid';
-                break;
-            case 'password':
-                passwordValidation = value.length >= 8;
-                fieldValidationErrors.password = passwordValidation ? '' : ' is too short';
-                break;
-            default:
-                break;
-        }
+import './login.css';
 
-        setFormErrors(fieldValidationErrors)
-        setEmailvalidation(emailValidation)
-        setpasswordvalidation(passwordValidation)
-        validateForm()
-    }
+const Login = () => {
 
-    const handaleClicked = () => {
-        // console.log('validate...', emailvalidation, passwordvalidation)
-        // // console.log(value.length())
-        if (emailvalidation && passwordvalidation) {
-            localStorage.setItem('username', value.email)
-        } else {
-           alert('Enter valid userId and password to login')
+  const [isSignUp, setIsSignUp] = useState(false);
 
-        }
-    }
+  const submitForm = () => {
+    dispatch(auth({ email: values.userName, password: values.password }, false))
+  }
 
-    const validateForm = () => {
-        console.log(emailvalidation, passwordvalidation)
-        setFormvalid(emailvalidation && passwordvalidation)
-    }
-    const errorClass = (error) => {
-        return (error.length === 0 ? '' : 'has-error');
-    }
+  const { values, errors, handleInputChange, handleSubmit } = useForm(submitForm, loginFormValidate);
 
-    return (
-        <div className="login">
-            <form >
-                <h2>Please Login Here !!!</h2>
-                <FormErrors formErrors={formErrors} />
-                <div className={`form-group ${errorClass(formErrors.email)}`}>
-                    <Input required={true} type='email' name='email' text='Email' value={value.email} autoFocus={true} onChange={(val) => handleChange(val)} />
-                </div>
-                <div className={`form-group ${errorClass(formErrors.password)}`}>
-                    <Input required={true} type='Password' name='password' text='Password' value={value.password} autoFocus={true} onChange={(val) => handleChange(val)} />
-                </div>
-                <PrimaryButton text='Login' type='submit' onClick={handaleClicked} />
-                    &nbsp;&nbsp;&nbsp;
-                <SecondaryButton text='Reset' />
-            </form>
-        </div>
-    )
+  const dispatch = useDispatch();
+
+  const loading = useSelector(state => state.authState.loading);
+  const isAuthenticated = useSelector(state => state.authState.isAuthenticated);
+
+  return (
+    <div className="login">
+
+      {isAuthenticated && <Redirect to="/" />}
+
+      {loading && <Loader />}
+
+      <h1 text="Please Login" />
+      <Input name="userName" text="User Name" value={values.userName} autoFocus={true} onChange={handleInputChange} />
+      {errors.userName && <label>{errors.userName}</label>}
+      <Input name="password" text="Password" value={values.password} onChange={handleInputChange} />
+      {errors.password && <label>{errors.password}</label>}
+
+      {/* <PrimaryButton text="Login" onClick={() => { setIsAuthenticated(true) }} /> */}
+      {
+        isSignUp ?
+          <PrimaryButton text="Sign Up" onClick={() => { dispatch(auth({ email: values.userName, password: values.password }, true)) }} />
+          :
+          <PrimaryButton text="Login" onClick={handleSubmit} />
+      }
+
+      {/* <SecondayButton text="Reset" /> */}
+      <br /><br />
+      <PrimaryButton text="Switch Button" onClick={() => { setIsSignUp(!isSignUp) }} />
+
+    </div>
+  )
 }
 
-export default Login
+export default withErrorHandler(Login, axios)

@@ -7,6 +7,7 @@ import StudentList from './Studentlist';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { saveStudent } from '../../../store/action/student';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 const Student = () => {
     const [isCreate , setisCreate] = useState (true);
@@ -33,7 +34,7 @@ const submit = () => {
 //     newCityArray.push(newCity)
 //   setlistofStudents(newCityArray)
 //     console.log(newCity);
-    axios.post('https://lms-redux.firebaseio.com/student.json', {Student : newCity})
+    // axios.post('https://lms-redux.firebaseio.com/student.json', {Student : newCity})
     dispatch(saveStudent(newCity))
 }
 
@@ -77,4 +78,4 @@ const editcreateStudent = () => {
         </div>
 }
 
-export default Student
+export default withErrorHandler(Student,axios);

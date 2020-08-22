@@ -35,6 +35,7 @@ useEffect(() =>{
         // newCourseArray.push(newCourse)
         // setlistofCourses(newCourseArray)
         // console.log(newCourse)
+        // axios.post('https://lms-redux.firebaseio.com/', { course: newCourse })
          dispatch(saveCourse(newCourse))
     }
     

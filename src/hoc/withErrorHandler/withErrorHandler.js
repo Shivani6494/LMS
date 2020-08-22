@@ -1,48 +1,42 @@
-import React, { useState, useEffect } from 'react'
-import { ModalWrap } from '../../components';
+import React, { useState, useEffect } from 'react';
 
+import ModalWrap from '../../components/Modal/Modal'
 
 const withErrorHandler = (WrappedComponent, axios) => {
 
-    return (props) => { 
-        const [error, setError] = useState(null);
-        
-        
-        useEffect(() => {
-            const reqInterc = axios.interceptors.request.use(req => {
-                setError(null)
-                console.log("req..", req)
-                return req;
-            })
+  return (props) => {
+    const [error, setError] = useState(null);
 
-            const resInterc = axios.interceptors.response.use(res => {
-                setError(error)
-                console.log("..error..", error)
-                throw error;
-            })
+    useEffect(() => {
+      const reqInterc = axios.interceptors.request.use(req => {
+        setError(null)
+        console.log("req...", req);
+        return req;
+      });
 
-            return () => {
-                axios.interceptors.eject(reqInterc)
-                axios.interceptors.eject(resInterc)
-            }
-        }, []);
+      const resInterc = axios.interceptors.response.use(res => res, (error) => {
+        setError(error)
+        console.log("....Error...", error);
+        throw error;
+      });
 
-        const handleErrorConfirmation = () => {
-            setError(null);
-        }
+      return () => {
+        axios.interceptors.request.eject(reqInterc);
+        axios.interceptors.response.eject(resInterc);
+      }
+    }, []);
 
-        return <>
-            <ModalWrap title="Error Message" lgShow={error} setLgShow={handleErrorConfirmation}>
-                {error && error.message}
-            </ModalWrap>
-            <WrappedComponent {...props} />
-            </>
+    const handleErrorConfirmation = () => {
+      setError(null);
     }
+
+    return <>
+      <ModalWrap title="Error Message" lgShow={error} setLgShow={handleErrorConfirmation}>
+        {error && error.message}
+      </ModalWrap>
+      <WrappedComponent {...props} />
+    </>
+  }
 }
 
-export default withErrorHandler
-
-// const NewWrappedComponent = (props) => {
-//     return <div />
-//   }
-
+export default withErrorHandler;

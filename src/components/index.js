@@ -7,6 +7,7 @@ import DropdownWrap from './Dropdown/Dropdown'
 import TableWrap from './Table/Table';
 import StudentTableWrap from './Table/Studenttable'
 import FromErrors from './FormErrors/FormErrors'
+import Loader from './Loader/Loader'
 
 export {
     ButtonWrap,
@@ -17,5 +18,6 @@ export {
     DropdownWrap,
     TableWrap,
     StudentTableWrap,
-    FromErrors
+    FromErrors,
+    Loader
 }

@@ -32,8 +32,8 @@ const CreateStudent = ({setnewCity,newCity}) => {
         // const key = e.target.name;
         // const value = e.target.value;
         setstudentCity({ ...studentcity, [key]: value });
-        console.log ('key',key);
-        console.log ('value',value);
+        // console.log ('key',key);
+        // console.log ('value',value);
         // console.log('studentcity...',setstudentCity)
         filterCity();
        
